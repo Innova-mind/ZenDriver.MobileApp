@@ -6,6 +6,6 @@ import retrofit2.http.Path
 
 interface MessageService {
     @GET("search-by-id/{id}")
-    fun fetchById(@Path("id") name: String): Call<MessageResponse>
+    fun fetchById(@Path("id") name: Int): Call<List<MessageResponse>>
 
 }
