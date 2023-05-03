@@ -1,6 +1,8 @@
 package pe.innvovamind.zendriver.ui.shared.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -9,19 +11,22 @@ import pe.innvovamind.zendriver.ui.notification.navigation.NotificationNavigatio
 
 @Composable
 fun GlobalNavigation() {
+    val viewModelStore = remember { ViewModelStore() }
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
+    navController.setViewModelStore(viewModelStore)
+    NavHost(navController = navController, startDestination = "messages") {
+//    NavHost(navController = navController, startDestination = "login") {
         composable("login") {
-            // LoginScreen(navController = navController)
+            // LoginScreen()
         }
         composable("home") {
-            //HomeNavigation(navController)
+            //HomeNavigation()
         }
         composable("notification") {
-            NotificationNavigation(navController)
+            //NotificationNavigation()
         }
         composable("messages") {
-            MessageNavigation(navController)
+            MessageNavigation()
         }
     }
 }

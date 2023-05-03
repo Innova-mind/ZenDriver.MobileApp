@@ -7,8 +7,9 @@ import androidx.room.RoomDatabase
 import pe.innvovamind.zendriver.ui.message.data.local.MessageDao
 import pe.innvovamind.zendriver.ui.message.data.local.MessageEntity
 import pe.innvovamind.zendriver.ui.notification.data.local.NotificationDao
+import pe.innvovamind.zendriver.ui.notification.data.local.NotificationEntity
 
-@Database(entities = [MessageEntity::class], version = 1)
+@Database(entities = [MessageEntity::class, NotificationEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun messageDao(): MessageDao
     abstract fun notificationDao(): NotificationDao
