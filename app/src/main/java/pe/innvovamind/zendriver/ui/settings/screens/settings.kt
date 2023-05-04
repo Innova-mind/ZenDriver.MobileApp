@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -24,9 +25,11 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -72,19 +75,36 @@ fun Settings(modifier: Modifier = Modifier) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
+            .background(Color.DarkGray)
     ) {
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp), horizontalArrangement = Arrangement.Center
         ) {
+            Card(modifier = Modifier.fillMaxWidth(), shape = CircleShape, elevation = 20.dp) {
+                Column() {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
 
-            Text(text = "Settings", fontSize = 30.sp)
+                        Text(text = "Configuración", fontSize = 30.sp)
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        SettingsImage()
+                    }
+                }
+
+
+            }
         }
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            SettingsImage()
-        }
+
         SettingsInformation(user.value)
     }
 }
@@ -95,7 +115,9 @@ fun SettingsImage(modifier: Modifier = Modifier) {
     AsyncImage(
         model = "https://static.vecteezy.com/system/resources/previews/007/296/443/original/user-icon-person-icon-client-symbol-profile-icon-vector.jpg",
         contentDescription = null,
-        modifier = Modifier.size(100.dp)
+        modifier = Modifier
+            .size(100.dp)
+            .clip(RoundedCornerShape(50.dp)),
     )
 
 }
@@ -108,38 +130,59 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
         mutableStateOf(user)
     }
     val new_values = user
-    Card(modifier = Modifier.background(Color.Cyan).padding(16.dp).clip(RoundedCornerShape(16.dp))) {
+    Card(
+        modifier = Modifier
+            .background(Color.DarkGray)
+            .padding(16.dp)
+            .clip(RoundedCornerShape(16.dp))
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            Text(text = "Full Name", fontSize = 16.sp)
-
+            Text(text = "Nombre completo", fontSize = 20.sp)
+            Spacer(modifier = Modifier.size(10.dp))
             Row(
                 modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(3.dp, Color.Black, RoundedCornerShape(14.dp))
                     .fillMaxWidth()
-                    .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween
+                    .padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+
             ) {
                 val isEditing = remember { mutableStateOf(false) }
                 if (isEditing.value) {
                     TextField(
                         value = user_change.value.Fname,
                         onValueChange = { user_change.value = user_change.value.copy(Fname = it) },
-                    )
+
+                        )
                 } else {
                     Text(user_change.value.Fname)
                 }
                 IconButton(onClick = { isEditing.value = !isEditing.value }) {
-                    Icon(Icons.Filled.Edit, null)
+                    if (isEditing.value) {
+                        Icon(Icons.Filled.Close, null)
+                    }else{
+                       Icon(Icons.Filled.Edit, null)
+                    }
                 }
             }
+            Spacer(modifier = Modifier.size(10.dp))
 
-            Text(text = "Phone", fontSize = 16.sp)
+            Text(text = "Teléfono", fontSize = 20.sp)
+            Spacer(modifier = Modifier.size(10.dp))
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(3.dp, Color.Black, RoundedCornerShape(14.dp))
+                    .padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+
             ) {
 
                 val isEditing = remember { mutableStateOf(false) }
@@ -152,16 +195,25 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
                     Text(user_change.value.Phone)
                 }
                 IconButton(onClick = { isEditing.value = !isEditing.value }) {
-                    Icon(Icons.Filled.Edit, null)
+                    if (isEditing.value) {
+                        Icon(Icons.Filled.Close, null)
+                    }else{
+                        Icon(Icons.Filled.Edit, null)
+                    }
                 }
 
             }
-            Text(text = "Email", fontSize = 16.sp)
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(text = "Correo electrónico", fontSize = 20.sp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(3.dp, Color.Black, RoundedCornerShape(14.dp))
+                    .padding(8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+
             ) {
                 val isEditing = remember { mutableStateOf(false) }
                 if (isEditing.value) {
@@ -173,22 +225,32 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
                     Text(user_change.value.Email)
                 }
                 IconButton(onClick = { isEditing.value = !isEditing.value }) {
-                    Icon(Icons.Filled.Edit, null)
+                    if (isEditing.value) {
+                        Icon(Icons.Filled.Close, null)
+                    }else{
+                        Icon(Icons.Filled.Edit, null)
+                    }
                 }
 
             }
-            Text(text = "Password", fontSize = 16.sp)
+            Text(text = "Contraseña", fontSize = 20.sp)
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .border(3.dp, Color.Black, RoundedCornerShape(14.dp))
                     .padding(8.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+
             ) {
                 val isEditing = remember { mutableStateOf(false) }
                 if (isEditing.value) {
                     TextField(
                         value = user_change.value.Password,
-                        onValueChange = { user_change.value = user_change.value.copy(Password = it) },
+                        onValueChange = {
+                            user_change.value = user_change.value.copy(Password = it)
+                        },
                         visualTransformation = PasswordVisualTransformation()
                     )
                 } else {
@@ -200,18 +262,24 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
                     )
                 }
                 IconButton(onClick = { isEditing.value = !isEditing.value }) {
-                    Icon(Icons.Filled.Edit, null)
+                    if (isEditing.value) {
+                        Icon(Icons.Filled.Close, null)
+                    }else{
+                        Icon(Icons.Filled.Edit, null)
+                    }
                 }
             }
             Spacer(modifier = Modifier.size(16.dp))
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 Button(onClick = {
+                    //create an alert
+
                     UserTest = user_change.value
                 }, modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp)) {
-                    Text(text = "save")
+                    Text(text = "Guardar")
                 }
                 Button(onClick = { /*TODO*/ }) {
-                    Text(text = "cancel")
+                    Text(text = "Cancelar")
                 }
             }
         }
