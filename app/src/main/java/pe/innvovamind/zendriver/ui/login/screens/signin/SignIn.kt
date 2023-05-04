@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import pe.innvovamind.zendriver.R
 
 @Composable
-fun LoginScreen(viewModel: SignInViewModel) {
+fun SignInScreen(viewModel: SignInViewModel) {
     Box(
         Modifier
             .fillMaxSize()
@@ -130,7 +130,7 @@ fun PasswordField(password: String, onTextFieldChanged: (String) -> Unit) {
             //focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
-        visualTransformation = PasswordVisualTransformation('*')
+        visualTransformation = PasswordVisualTransformation()
     )
 }
 
