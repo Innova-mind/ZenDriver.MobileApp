@@ -1,21 +1,19 @@
 package pe.innvovamind.zendriver.ui.message.navigation
 
-import android.app.Application
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
-import androidx.lifecycle.viewmodel.compose.viewModel
 
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import pe.innvovamind.zendriver.ui.message.screens.MessageViewModel
+import pe.innvovamind.zendriver.ui.message.data.remote.MessageResponse
+import pe.innvovamind.zendriver.ui.message.data.remote.MessagesClient
+import pe.innvovamind.zendriver.ui.message.screens.MessageDetail
 import pe.innvovamind.zendriver.ui.message.screens.Messages
+import retrofit2.Call
+import retrofit2.Callback
 
 @Composable
 fun MessageNavigation() {
@@ -29,7 +27,45 @@ fun MessageNavigation() {
     ) {
         composable("search") {
 
-            Messages()
+            Messages(
+                selectMessage = { emitter,receiver ->
+                    navController.navigate("message/${emitter}/${receiver}")
+                }
+            )
+        }
+        composable("message/{emitter}/{receiver}") { backStackEntry ->
+            val emitter = backStackEntry.arguments?.getInt("emitter") as Int
+            val receiver = backStackEntry.arguments?.getInt("receiver") as Int
+
+            val messageService = MessagesClient.messageService
+            val getMessage = messageService.getMessage(emitter,receiver)
+
+            //create a mutable list of Message data type
+            val message = remember {
+                mutableStateListOf<MessageResponse>()
+            }
+
+
+            getMessage.enqueue(object : Callback<List<MessageResponse>>
+            {
+                override fun onResponse(
+                    call: Call<List<MessageResponse>>,
+                    response: retrofit2.Response<List<MessageResponse>>
+                ) {
+                    val messageResponse = response.body()?.get(0)
+                    if (messageResponse != null) {
+                        message.addAll(response.body()!!)
+                    }
+                }
+
+                override fun onFailure(call: Call<List<MessageResponse>>, t: Throwable) {
+                    println("Error")
+                }
+            })
+            //Log.d("Message-Ni", message.toString())
+            MessageDetail(messageList = message, onBack = {
+                navController.popBackStack()
+            })
         }
     }
 }
