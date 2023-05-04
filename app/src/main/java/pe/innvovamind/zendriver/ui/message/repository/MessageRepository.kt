@@ -29,7 +29,9 @@ class MessageRepository (
                             id = it.id,
                             content = it.content,
                             emitter = it.emitter,
-                            receiver = it.receiver
+                            receiver = it.receiver,
+                            emitterName = it.emitterName,
+                            emitterPhotoUrl = it.emitterPhotoUrl,
                         )
                     }
                     _messages.value = messages
@@ -41,4 +43,34 @@ class MessageRepository (
             }
         })
     }
+    fun getMessagesByEmmiterAndReceiver(emitterId: Int, receiverId: Int) {
+        val getMessage = messageService.getMessage(emitterId,receiverId)
+        getMessage.enqueue(object : Callback<List<MessageResponse>>
+        {
+            override fun onResponse(
+                call: Call<List<MessageResponse>>,
+                response: Response<List<MessageResponse>>
+            ) {
+                val messageResponse = response.body()?.get(0)
+                if (messageResponse != null) {
+                    val message = response.body()!!.map {
+                        Message(
+                            id = it.id,
+                            content = it.content,
+                            emitter = it.emitter,
+                            receiver = it.receiver,
+                            emitterName = it.emitterName,
+                            emitterPhotoUrl = it.emitterPhotoUrl,
+                        )
+                    }
+                    _messages.value = message
+                }
+            }
+
+            override fun onFailure(call: Call<List<MessageResponse>>, t: Throwable) {
+                println("Error")
+            }
+        })
+    }
+
 }

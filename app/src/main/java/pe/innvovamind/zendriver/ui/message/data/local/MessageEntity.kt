@@ -10,7 +10,7 @@ class MessageEntity (
     val id: Int,
     val content: String,
     @ColumnInfo(name = "emitter_id")
-    val emitter: String,
+    val emitter: Int,
     @ColumnInfo(name = "receiver_id")
-    val receiver: String,
+    val receiver: Int,
 )
