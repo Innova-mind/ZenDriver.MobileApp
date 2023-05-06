@@ -1,32 +1,49 @@
 package pe.innvovamind.zendriver.ui.shared.navigation
 
+import android.provider.ContactsContract
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModelStore
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import pe.innvovamind.zendriver.ui.home.screen.HomeScreen
+import pe.innvovamind.zendriver.ui.login.screens.signin.SignInScreen
+import pe.innvovamind.zendriver.ui.login.screens.signin.SignInViewModel
 import pe.innvovamind.zendriver.ui.message.navigation.MessageNavigation
-import pe.innvovamind.zendriver.ui.notification.navigation.NotificationNavigation
+import pe.innvovamind.zendriver.ui.profile.screen.ProfileScreen
+import pe.innvovamind.zendriver.ui.settings.screens.SettingsScreen
+import pe.innvovamind.zendriver.ui.shared.screens.BottomMenu
+import pe.innvovamind.zendriver.ui.shared.screens.NavigationAppBar
 
 @Composable
-fun GlobalNavigation() {
+fun GlobalNavigation(viewModel: SignInViewModel) {
     val viewModelStore = remember { ViewModelStore() }
     val navController = rememberNavController()
     navController.setViewModelStore(viewModelStore)
-    NavHost(navController = navController, startDestination = "messages") {
+    NavHost(navController = navController, startDestination = "navigation") {
 //    NavHost(navController = navController, startDestination = "login") {
+
         composable("login") {
-            // LoginScreen()
+
+            SignInScreen(viewModel = viewModel, onSignInSuccess = { navController.navigate("navigation") })
         }
-        composable("home") {
-            //HomeNavigation()
+        composable("navigation") {
+            NavigationAppBar(
+                onHomeClick = { navController.navigate("home") },
+                onMessageClick = { navController.navigate("message") },
+                onSettingsClick = { navController.navigate("settings") },
+                onProfileClick = { navController.navigate("profile") },
+                navController = navController
+            )
         }
-        composable("notification") {
-            //NotificationNavigation()
-        }
-        composable("messages") {
-            MessageNavigation()
-        }
+        composable("home") { HomeScreen() }
+        composable("message") {MessageNavigation() }
+        composable("settings") { SettingsScreen() }
+        composable("profile") { ProfileScreen() }
     }
 }

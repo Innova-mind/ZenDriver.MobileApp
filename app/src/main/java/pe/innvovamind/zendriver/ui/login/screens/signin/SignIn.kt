@@ -33,21 +33,21 @@ import kotlinx.coroutines.launch
 import pe.innvovamind.zendriver.R
 
 @Composable
-fun SignInScreen(viewModel: SignInViewModel) {
+fun SignInScreen(viewModel: SignInViewModel, onSignInSuccess: () -> Unit) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        SignIn(Modifier.align(Alignment.Center), viewModel)
+        SignIn(Modifier.align(Alignment.Center), viewModel,onSignInSuccess)
     }
 }
 
 @Composable
-fun SignIn(modifier: Modifier, viewModel: SignInViewModel) {
+fun SignIn(modifier: Modifier, viewModel: SignInViewModel, onSignInSuccess: () -> Unit) {
     val email :String by viewModel.email.observeAsState(initial = "")
     val password :String by viewModel.password.observeAsState(initial = "")
-    val loginEnabled :Boolean by viewModel.loginEnabled.observeAsState(initial = false)
+    val loginEnabled :Boolean by viewModel.loginEnabled.observeAsState(initial = true)
     val isLoading :Boolean by viewModel.isLoading.observeAsState(initial = false)
     val coroutineScope = rememberCoroutineScope()
 
@@ -58,6 +58,7 @@ fun SignIn(modifier: Modifier, viewModel: SignInViewModel) {
                 .padding(16.dp)
         ) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
+            onSignInSuccess()
         }
     } else {
         Column(modifier = modifier) {
