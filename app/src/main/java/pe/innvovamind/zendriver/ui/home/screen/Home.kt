@@ -44,7 +44,7 @@ import pe.innvovamind.zendriver.R
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier){
+fun HomeScreen(){
     Column(modifier = Modifier
         .fillMaxSize()
         .fillMaxHeight()

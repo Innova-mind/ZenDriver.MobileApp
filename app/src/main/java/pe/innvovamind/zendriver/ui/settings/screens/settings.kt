@@ -44,7 +44,7 @@ import retrofit2.Response
 
 
 @Composable
-fun Settings(modifier: Modifier = Modifier) {
+fun SettingsScreen(modifier: Modifier = Modifier) {
     val user = remember {
         mutableStateOf<Driver>(Driver("Test", "d@gmail.com", "password", "34858878"))
     }
@@ -288,5 +288,5 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun PreviewSettings() {
-    Settings()
+    SettingsScreen()
 }
