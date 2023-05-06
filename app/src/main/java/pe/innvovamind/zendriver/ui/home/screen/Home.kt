@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,6 +46,8 @@ import pe.innvovamind.zendriver.R
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier){
     Column(modifier = Modifier
+        .fillMaxSize()
+        .fillMaxHeight()
         .verticalScroll(rememberScrollState())
         .padding(8.dp)){
         Row( modifier = Modifier
@@ -52,7 +55,6 @@ fun HomeScreen(modifier: Modifier = Modifier){
             .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "☰")
         }
         Card(modifier = Modifier
             .fillMaxSize()
@@ -89,11 +91,8 @@ fun HomeScreen(modifier: Modifier = Modifier){
 @Composable
 fun PublicationText(){
     Card(modifier = Modifier.padding(16.dp)) {
-        Text(text = "Welcome Back!", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.width(2.dp))
-        Text(text = "We hope you have a great day today. These are your news.", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+        Text(text = "Welcome Back! We hope you have a great day today. These are your news.", fontSize = 19.sp, fontWeight = FontWeight.Bold)
     }
-
 }
 
 
@@ -388,6 +387,7 @@ fun CommentCard2() {
                 contentDescription = "Enviar",
                 modifier = Modifier.size(24.dp)
             )
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }

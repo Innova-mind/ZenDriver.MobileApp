@@ -39,14 +39,9 @@ fun ProfileScreen(modifier: Modifier = Modifier){
             .padding(8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "☰")
         }
-        Card(modifier = Modifier.fillMaxSize().padding(4.dp)
-
-        ) {
             ImageProfile()
             ProfileInformation()
-        }
 
     }
 
