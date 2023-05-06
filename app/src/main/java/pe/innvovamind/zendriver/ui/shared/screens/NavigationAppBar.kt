@@ -6,23 +6,27 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import pe.innvovamind.zendriver.ui.home.screen.HomeScreen
+import pe.innvovamind.zendriver.ui.message.navigation.MessageNavigation
+import pe.innvovamind.zendriver.ui.profile.screen.ProfileScreen
+import pe.innvovamind.zendriver.ui.settings.screens.SettingsScreen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun NavigationAppBar(
-    onHomeClick : () -> Unit,
-    onMessageClick : () -> Unit,
-    onSettingsClick : () -> Unit,
-    onProfileClick : () -> Unit,
-    navController: NavHostController
 ) {
-    val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Open))
+    val viewModelStore = remember { ViewModelStore() } // Crea el ViewModelStore
+    val navController = rememberNavController()
+    navController.setViewModelStore(viewModelStore) // Establece el ViewModelStore
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = {
             TopAppBar(
                 title = { Text(text = "ZenDriver") },
@@ -43,7 +47,7 @@ fun NavigationAppBar(
                     label = { Text("Home") },
                     selected = currentRoute == "home",
                     onClick = {
-                        onHomeClick()
+                        navController.navigate("home")
                     }
                 )
 
@@ -53,7 +57,7 @@ fun NavigationAppBar(
                     label = { Text("Message") },
                     selected = currentRoute == "message",
                     onClick = {
-                        onMessageClick()
+                        navController.navigate("message")
                     }
                 )
 
@@ -62,7 +66,7 @@ fun NavigationAppBar(
                     label = { Text("Settings") },
                     selected = currentRoute == "settings",
                     onClick = {
-                        onSettingsClick()
+                        navController.navigate("settings")
                     }
                 )
 
@@ -71,12 +75,19 @@ fun NavigationAppBar(
                     label = { Text("Profile") },
                     selected = currentRoute == "profile",
                     onClick = {
-                        onProfileClick()
+                        navController.navigate("profile")
                     }
                 )
             };
         },
 
-        content = { HomeScreen() },
+        content = {
+            NavHost(navController, startDestination = "home") {
+                composable("home") { HomeScreen() }
+                composable("message") { MessageNavigation() }
+                composable("settings") { SettingsScreen() }
+                composable("profile") { ProfileScreen() }
+            }
+        },
     )
 }

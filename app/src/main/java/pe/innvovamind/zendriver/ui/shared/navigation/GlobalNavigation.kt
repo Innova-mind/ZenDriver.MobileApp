@@ -17,7 +17,6 @@ import pe.innvovamind.zendriver.ui.login.screens.signin.SignInViewModel
 import pe.innvovamind.zendriver.ui.message.navigation.MessageNavigation
 import pe.innvovamind.zendriver.ui.profile.screen.ProfileScreen
 import pe.innvovamind.zendriver.ui.settings.screens.SettingsScreen
-import pe.innvovamind.zendriver.ui.shared.screens.BottomMenu
 import pe.innvovamind.zendriver.ui.shared.screens.NavigationAppBar
 
 @Composable
@@ -26,24 +25,13 @@ fun GlobalNavigation(viewModel: SignInViewModel) {
     val navController = rememberNavController()
     navController.setViewModelStore(viewModelStore)
     NavHost(navController = navController, startDestination = "navigation") {
-//    NavHost(navController = navController, startDestination = "login") {
-
         composable("login") {
 
             SignInScreen(viewModel = viewModel, onSignInSuccess = { navController.navigate("navigation") })
         }
         composable("navigation") {
-            NavigationAppBar(
-                onHomeClick = { navController.navigate("home") },
-                onMessageClick = { navController.navigate("message") },
-                onSettingsClick = { navController.navigate("settings") },
-                onProfileClick = { navController.navigate("profile") },
-                navController = navController
-            )
+            NavigationAppBar()
         }
-        composable("home") { HomeScreen() }
-        composable("message") {MessageNavigation() }
-        composable("settings") { SettingsScreen() }
-        composable("profile") { ProfileScreen() }
+
     }
 }
