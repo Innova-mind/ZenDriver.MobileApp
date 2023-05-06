@@ -1,12 +1,15 @@
 package pe.innvovamind.zendriver.ui.shared.screens
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
@@ -37,7 +40,7 @@ fun NavigationAppBar(
                 }
             )
         },
-        bottomBar = {
+        bottomBar =  {
             BottomNavigation {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -82,7 +85,7 @@ fun NavigationAppBar(
         },
 
         content = {
-            NavHost(navController, startDestination = "home") {
+            NavHost(navController, startDestination = "home", Modifier.padding(0.dp, 0.dp, 0.dp, 55.dp)) {
                 composable("home") { HomeScreen() }
                 composable("message") { MessageNavigation() }
                 composable("settings") { SettingsScreen() }
