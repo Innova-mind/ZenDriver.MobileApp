@@ -17,14 +17,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +32,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -50,7 +46,7 @@ import retrofit2.Response
 @Composable
 fun Settings(modifier: Modifier = Modifier) {
     val user = remember {
-        mutableStateOf<Driver>(Driver("Test", "d@gmail.com", "dawdwadaw", "34858878"))
+        mutableStateOf<Driver>(Driver("Test", "d@gmail.com", "password", "34858878"))
     }
     val settingService = SettingsClient.settingsService()
     val fetchData = settingService.fetchData("1")
@@ -71,11 +67,10 @@ fun Settings(modifier: Modifier = Modifier) {
         }
     })
 
-
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .background(Color.DarkGray)
+            .background(Color.White)
     ) {
 
         Row(
@@ -83,7 +78,7 @@ fun Settings(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
                 .padding(15.dp), horizontalArrangement = Arrangement.Center
         ) {
-            Card(modifier = Modifier.fillMaxWidth(), shape = CircleShape, elevation = 20.dp) {
+            Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(10.dp), elevation = 20.dp) {
                 Column() {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -132,14 +127,14 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
     val new_values = user
     Card(
         modifier = Modifier
-            .background(Color.DarkGray)
             .padding(16.dp)
-            .clip(RoundedCornerShape(16.dp))
-    ) {
+
+    , elevation = 20.dp) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .background(Color.White)
         ) {
             Text(text = "Nombre completo", fontSize = 20.sp)
             Spacer(modifier = Modifier.size(10.dp))
@@ -275,13 +270,23 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
                     //create an alert
 
                     UserTest = user_change.value
-                }, modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp)) {
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = Color(0,150,136), contentColor = Color.White),
+                    modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp)) {
                     Text(text = "Guardar")
                 }
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { /*TODO*/ }
+                    , colors = ButtonDefaults.buttonColors(backgroundColor = Color(0,150,136), contentColor = Color.White),
+                    modifier = Modifier.padding(16.dp, 0.dp, 16.dp, 0.dp)
+                ) {
                     Text(text = "Cancelar")
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PreviewSettings() {
+    Settings()
 }
