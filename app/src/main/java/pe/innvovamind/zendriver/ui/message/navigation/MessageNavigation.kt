@@ -62,6 +62,18 @@ fun MessageNavigation() {
                     println("Error")
                 }
             })
+            message.add(MessageResponse(1,
+                "Tenga buen día, al usar la aplicación, me he dado cuenta que usted cumple " +
+                        "los requisitos que necesito. ¿Estaría de acuerdo en trabajar para el Grupo " +
+                        "Gloria?","","",1,2))
+            message.add(MessageResponse(2,
+                "Buenos días, entiendo que necesita un conductor con experiencia en el manejo de " +
+                        "camiones de carga pesada, con licencia AIIIB. Actualmente no está dentro de los " +
+                        "planes de la empresa contratar a un nuevo conductor, pero si usted está " +
+                        "interesado, podemos hacer una excepción.","","",2,1))
+            message.add(MessageResponse(3,
+                "Me gustaría recibir una actualización de su situación actual, para poder " +
+                        "considerarlo en un futuro.","","",1,2))
             //Log.d("Message-Ni", message.toString())
             MessageDetail(messageList = message, onBack = {
                 navController.popBackStack()
