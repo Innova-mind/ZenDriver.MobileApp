@@ -45,10 +45,10 @@ fun SignInScreen(viewModel: SignInViewModel, onSignInSuccess: () -> Unit) {
 
 @Composable
 fun SignIn(modifier: Modifier, viewModel: SignInViewModel, onSignInSuccess: () -> Unit) {
-    val email :String by viewModel.email.observeAsState(initial = "")
-    val password :String by viewModel.password.observeAsState(initial = "")
-    val loginEnabled :Boolean by viewModel.loginEnabled.observeAsState(initial = true)
-    val isLoading :Boolean by viewModel.isLoading.observeAsState(initial = false)
+    val email: String by viewModel.email.observeAsState(initial = "")
+    val password: String by viewModel.password.observeAsState(initial = "")
+    val loginEnabled: Boolean by viewModel.loginEnabled.observeAsState(initial = true)
+    val isLoading: Boolean by viewModel.isLoading.observeAsState(initial = false)
     val coroutineScope = rememberCoroutineScope()
 
     if (isLoading) {
@@ -58,7 +58,6 @@ fun SignIn(modifier: Modifier, viewModel: SignInViewModel, onSignInSuccess: () -
                 .padding(16.dp)
         ) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
-            onSignInSuccess()
         }
     } else {
         Column(modifier = modifier) {
@@ -73,6 +72,7 @@ fun SignIn(modifier: Modifier, viewModel: SignInViewModel, onSignInSuccess: () -
             SignInButton(loginEnabled) {
                 coroutineScope.launch {
                     viewModel.onLoginClicked()
+                    onSignInSuccess()
                 }
             }
         }
