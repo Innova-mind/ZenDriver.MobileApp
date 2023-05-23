@@ -10,19 +10,21 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.*
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import pe.innvovamind.zendriver.ui.message.data.remote.MessageResponse
+import pe.innvovamind.zendriver.ui.message.repository.MessageRepository
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MessageDetail(messageList: SnapshotStateList<MessageResponse>, onBack: () -> Boolean) {
-
+fun MessageDetail(onBack: () -> Boolean, emitterId: Int, receiverId: Int) {
+    val messageRepository = remember { MessageRepository() }
+    val messageState by messageRepository.messages.observeAsState(listOf())
+    messageRepository.getMessagesByEmmiterAndReceiver(emitterId, receiverId)
 
     var messageToSend by remember { mutableStateOf("") }
 
@@ -34,11 +36,11 @@ fun MessageDetail(messageList: SnapshotStateList<MessageResponse>, onBack: () ->
             modifier = Modifier.weight(1f),
             contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
         ) {
-            itemsIndexed(messageList) { index, message ->
+            itemsIndexed(messageState) { index, message ->
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     elevation = 2.dp,
-                    backgroundColor = if (message.receiver == 2) Color(0xFF1e81b0) else Color.White,
+                    backgroundColor = if (message.receiverId   == 2) Color(0xFF1e81b0) else Color.White,
                     onClick = {
                         // hacer algo al hacer clic en la tarjeta
                     }
@@ -78,7 +80,7 @@ fun MessageDetail(messageList: SnapshotStateList<MessageResponse>, onBack: () ->
                     ),
                     keyboardActions = KeyboardActions(
                         onSend = {
-                            sendMessage(messageList, messageToSend)
+                            sendMessage(messageToSend)
                             messageToSend = ""
                         }
                     )
@@ -86,7 +88,7 @@ fun MessageDetail(messageList: SnapshotStateList<MessageResponse>, onBack: () ->
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(
                     onClick = {
-                        sendMessage(messageList, messageToSend)
+                        sendMessage(messageToSend)
                         messageToSend = ""
                     },
                     enabled = messageToSend.isNotBlank()
@@ -102,18 +104,17 @@ fun MessageDetail(messageList: SnapshotStateList<MessageResponse>, onBack: () ->
 }
 
 private fun sendMessage(
-    messageList: SnapshotStateList<MessageResponse>,
     message: String
 ) {
     if (message.isNotBlank()) {
-        messageList.add(MessageResponse(
-            messageList.size + 1,
-            message,
-            "",
-            "",
-            1,
-            2
-        ))
+//        messageList.add(MessageResponse(
+//            messageList.size + 1,
+//            message,
+//            "",
+//            "",
+//            1,
+//            2
+//        ))
     }
 }
 @Composable

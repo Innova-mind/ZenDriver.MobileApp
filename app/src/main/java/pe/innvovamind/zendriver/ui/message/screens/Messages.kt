@@ -9,6 +9,9 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,24 +21,28 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import pe.innvovamind.zendriver.ui.message.data.model.Message
+import pe.innvovamind.zendriver.ui.message.repository.MessageRepository
 
 @Composable
-fun Messages(selectMessage: (String,String) -> Unit) {
+fun Messages(selectMessage: (String,String) -> Unit, receiverId: Int) {
     //create a list of messages to set in iTEMsINDEXED
-    val messages : MutableList<Message>  = mutableListOf()
-    messages.add(Message(1,"Buenos días, entiendo que necesita...","Grupo Gloria",
-        "https://i.pinimg.com/474x/28/26/de/2826de985643bc378786eb2848f0af16.jpg",
-         1,2))
-    messages.add(Message(2, "Actualmente no está dentro de los...","Jorge Molina Cruz",
-        "https://www.pngmart.com/files/15/Smiling-Business-Man-Standing-PNG-Clipart.png",
-        1,2))
-    messages.add(Message(3, "Me gustaría recibir una actualizaci...","Rafaela Quinta Vallejo",
-        "https://e7.pngegg.com/pngimages/464/111/png-clipart-valligent-business-consultant-information-technology-businesswoman-service-people.png",
-        1,2))
+    val messageRepository = remember { MessageRepository() }
+    val messageGeneralState by messageRepository.messagesGeneral.observeAsState(listOf())
+    messageRepository.fetchById(receiverId)
+
+//    messages.add(Message(1,"Buenos días, entiendo que necesita...","Grupo Gloria",
+//        "https://i.pinimg.com/474x/28/26/de/2826de985643bc378786eb2848f0af16.jpg",
+//         1,2))
+//    messages.add(Message(2, "Actualmente no está dentro de los...","Jorge Molina Cruz",
+//        "https://www.pngmart.com/files/15/Smiling-Business-Man-Standing-PNG-Clipart.png",
+//        1,2))
+//    messages.add(Message(3, "Me gustaría recibir una actualizaci...","Rafaela Quinta Vallejo",
+//        "https://e7.pngegg.com/pngimages/464/111/png-clipart-valligent-business-consultant-information-technology-businesswoman-service-people.png",
+//        1,2))
 
     LazyVerticalGrid(columns = GridCells.Fixed(1)) {
 
-        itemsIndexed(messages) { index, item ->
+        itemsIndexed(messageGeneralState) { index, item ->
             MessageItem(
                 item, index
             ) {
@@ -66,7 +73,7 @@ private fun MessageItem(message: Message, index: Int, selectMessage: () -> Unit)
                     .padding(8.dp)
             ) {
                 AsyncImage(
-                    model = message.emitterPhotoUrl,
+                    model = message.receiverPhotoUrl,
                     contentDescription = null,
                     contentScale = ContentScale.FillBounds,
                     modifier = Modifier.clip(CircleShape)
@@ -78,7 +85,7 @@ private fun MessageItem(message: Message, index: Int, selectMessage: () -> Unit)
                     .weight(1f)
             ) {
                 Text(
-                    text = message.emitterName,
+                    text = message.receiverName,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )

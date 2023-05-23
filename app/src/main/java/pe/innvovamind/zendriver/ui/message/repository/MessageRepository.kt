@@ -5,16 +5,19 @@ import pe.innvovamind.zendriver.ui.message.data.local.MessageDao
 import pe.innvovamind.zendriver.ui.message.data.model.Message
 import pe.innvovamind.zendriver.ui.message.data.remote.MessageResponse
 import pe.innvovamind.zendriver.ui.message.data.remote.MessageService
+import pe.innvovamind.zendriver.ui.message.data.remote.MessagesClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.sql.Date
 
 class MessageRepository (
-    private val messageService: MessageService,
-    private val messageDao: MessageDao
 ){
+    private val messageService = MessagesClient.messageService
     private val _messages =  MutableLiveData<List<Message>>(emptyList())
+    private val _messagesGeneral =  MutableLiveData<List<Message>>(emptyList())
     val messages get() = _messages
+    val messagesGeneral get() = _messagesGeneral
     fun fetchById(id: Int) {
         val fetchById = messageService.fetchById(id)
         fetchById.enqueue( object : Callback<List<MessageResponse>> {
@@ -23,18 +26,22 @@ class MessageRepository (
                 response: Response<List<MessageResponse>>
             ) {
                 val body = response.body()
+                println("FetchById: ${response.body()}")
                 if (response.isSuccessful && body != null) {
                     val messages = body.map {
                         Message(
                             id = it.id,
                             content = it.content,
                             emitter = it.emitter,
+                            emitterId = it.emitter.id,
                             receiver = it.receiver,
-                            emitterName = it.emitterName,
-                            emitterPhotoUrl = it.emitterPhotoUrl,
+                            receiverId = it.receiver.id,
+                            receiverName = it.receiver.firstName+" "+it.receiver.lastName,
+                            receiverPhotoUrl = it.receiver.imageUrl,
+                            createdAt = it.createdAt as Date
                         )
                     }
-                    _messages.value = messages
+                    _messagesGeneral.value = messages
                 }
             }
 
@@ -58,9 +65,12 @@ class MessageRepository (
                             id = it.id,
                             content = it.content,
                             emitter = it.emitter,
+                            emitterId = it.emitter.id,
                             receiver = it.receiver,
-                            emitterName = it.emitterName,
-                            emitterPhotoUrl = it.emitterPhotoUrl,
+                            receiverId = it.receiver.id,
+                            receiverName = it.receiver.firstName+" "+it.receiver.lastName,
+                            receiverPhotoUrl = it.receiver.imageUrl,
+                            createdAt = it.createdAt as Date
                         )
                     }
                     _messages.value = message
