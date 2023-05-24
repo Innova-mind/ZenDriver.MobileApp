@@ -6,8 +6,7 @@ import retrofit2.http.Path
 
 interface SettingsService {
 
-    @GET("driverprofile/{id}")
-    fun fetchData(@Path("id") id: String): Call<SettingsResponse>
-
+    @GET("/{id}")
+    fun fetchUserData(@Path("id") id: Int): Call<SettingsResponse>
 
 }
