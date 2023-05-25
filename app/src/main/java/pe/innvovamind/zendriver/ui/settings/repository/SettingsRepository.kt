@@ -1,12 +1,34 @@
 package pe.innvovamind.zendriver.ui.settings.repository
 
-import androidx.lifecycle.MutableLiveData
-import pe.innvovamind.zendriver.ui.settings.data.local.SettingsDao
-import pe.innvovamind.zendriver.ui.settings.data.local.SettingsEntity
+
+import pe.innvovamind.zendriver.ui.settings.data.model.Driver
+import pe.innvovamind.zendriver.ui.settings.data.remote.SettingsResponse
 import pe.innvovamind.zendriver.ui.settings.data.remote.SettingsService
-import java.sql.Driver
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-interface SettingsRepository {
-    suspend fun fetchData(name: String): SettingsEntity
+class SettingsRepository(
+    val SettingsService: SettingsService
+) {
+    fun fetchbyId(id: Int): Driver {
+        val fetchbyid = SettingsService.fetchUserData(id)
+        lateinit var driver : Driver
+        fetchbyid.enqueue(object: Callback<SettingsResponse>{
+            override fun onResponse(
+                call: Call<SettingsResponse>,
+                response: Response<SettingsResponse>
+            ) {
+                if (response.isSuccessful) {
+                    driver = response.body()!!.result
+                }
+            }
 
+            override fun onFailure(call: Call<SettingsResponse>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
+        return driver
+    }
 }

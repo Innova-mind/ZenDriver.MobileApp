@@ -1,6 +1,5 @@
 package pe.innvovamind.zendriver.ui.settings.screens
 
-import android.util.Log
 import pe.innvovamind.zendriver.ui.settings.data.model.Driver
 
 
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
@@ -28,44 +26,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import pe.innvovamind.zendriver.ui.settings.data.remote.SettingsClient
-import pe.innvovamind.zendriver.ui.settings.data.remote.SettingsResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 
 @Composable
 fun SettingsScreen(modifier: Modifier = Modifier) {
-    val user = remember {
-        mutableStateOf<Driver>(Driver("Test", "d@gmail.com", "password", "34858878"))
+
+    var user = remember {
+        mutableStateOf<Driver?>(null)
     }
-    val settingService = SettingsClient.settingsService()
-    val fetchData = settingService.fetchData("1")
 
-    fetchData.enqueue(object : Callback<SettingsResponse> {
-        override fun onResponse(
-            call: Call<SettingsResponse>,
-            response: Response<SettingsResponse>
-        ) {
-            if (response.isSuccessful) {
-                user.value = response.body()!!.result
-                Log.d("Settings", "Success: ${response.body()!!.result}")
-            }
-        }
-
-        override fun onFailure(call: Call<SettingsResponse>, t: Throwable) {
-            Log.d("Settings", "Error: ${t.message}")
-        }
-    })
 
     Column(
         modifier = Modifier
@@ -100,7 +75,10 @@ fun SettingsScreen(modifier: Modifier = Modifier) {
         }
 
 
-        SettingsInformation(user.value)
+        user.value?.let { user ->
+            SettingsInformation(user)
+        }
+
     }
 }
 
@@ -150,12 +128,12 @@ fun SettingsInformation(user: Driver, modifier: Modifier = Modifier) {
                 val isEditing = remember { mutableStateOf(false) }
                 if (isEditing.value) {
                     TextField(
-                        value = user_change.value.Fname,
-                        onValueChange = { user_change.value = user_change.value.copy(Fname = it) },
+                        value = user_change.value.FirstName,
+                        onValueChange = { user_change.value = user_change.value.copy(FirstName = it) },
 
                         )
                 } else {
-                    Text(user_change.value.Fname)
+                    Text(user_change.value.FirstName)
                 }
                 IconButton(onClick = { isEditing.value = !isEditing.value }) {
                     if (isEditing.value) {

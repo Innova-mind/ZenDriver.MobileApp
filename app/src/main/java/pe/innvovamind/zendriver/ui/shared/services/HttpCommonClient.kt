@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object HttpCommonClient {
-    const val BASE_URL = "https://localhost:4500/api/v1/"
+    const val BASE_URL = "https://webapp-innva.azurewebsites.net/swagger/v1/"
 
     inline fun <reified T> createService(domain: String): T {
         val retrofit = Retrofit.Builder()
